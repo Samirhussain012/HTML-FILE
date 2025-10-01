@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Film Flicker Production</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0f1724;
+      --accent: #ff3366;
+      --muted: #6b7280;
+      --card: #ffffff;
+      --glass: rgba(255,255,255,0.06);
+      --radius: 12px;
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%; margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; color:#0b1220; background:#f6f7fb; -webkit-font-smoothing:antialiased}
+    a{color:inherit; text-decoration:none;}
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+      border-bottom: 1px solid rgba(15,20,36,0.04);
+      padding:12px 28px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand img{height:48px; width:48px; object-fit:cover; border-radius:8px; box-shadow: 0 6px 18px rgba(3,10,30,0.06)}
+    .brand h1{font-size:18px;margin:0;font-weight:700;color:var(--accent)}
+    nav{display:flex; gap:14px; align-items:center}
+    nav a{
+      text-decoration:none;
+      color:#0b1220;
+      font-weight:600;
+      padding:8px 12px;
+      border-radius:8px;
+      transition:all .18s;
+      font-size:14px;
+    }
+    nav a:hover{background:var(--glass); transform:translateY(-2px)}
+    .cta{
+      background:var(--accent);
+      color:white;
+      padding:8px 14px;
+      border-radius:8px;
+      font-weight:700;
+      box-shadow: 0 8px 30px rgba(255,51,102,0.14);
+    }
+
+    /* HERO */
+    .hero{
+      position:relative;
+      min-height:62vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:white;
+      overflow:hidden;
+    }
+    .hero__bg{
+      position:absolute; inset:0;
+      background-image: url('https://i.ibb.co/whWxG9Q4/images.jpg');
+      background-size:cover;
+      background-position:center;
+      transform:translateZ(0);
+      transition: transform .2s linear;
+      filter: saturate(1.05) contrast(.95);
+    }
+    .hero__overlay{
+      position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,51,102,0.35), rgba(6,6,6,0.55));
+    }
+    .hero__content{
+      position:relative; z-index:2; max-width:960px; padding:48px 20px;
+      animation: fadeUp .9s ease both;
+    }
+    .hero h2{font-size:36px; margin:0 0 12px; letter-spacing:0.2px}
+    .hero p{margin:0 0 18px; font-size:18px; opacity:0.95}
+    .hero .buttons{display:flex; gap:12px; justify-content:center; margin-top:8px}
+    .btn{padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:700; display:inline-block}
+    .btn--primary{background:var(--accent); color:white}
+    .btn--outline{background:transparent; border:1px solid rgba(255,255,255,0.18); color:white}
+
+    /* SECTION LAYOUT */
+    .container{max-width:1100px; margin:0 auto; padding:68px 20px}
+    .section-title{display:flex; align-items:baseline; gap:12px; margin-bottom:22px}
+    .section-title h3{margin:0; font-size:22px}
+    .lead{color:var(--muted); margin-bottom:26px}
+
+    /* Cards & services */
+    .grid{display:grid; gap:20px}
+    .services-grid{grid-template-columns:repeat(auto-fit, minmax(180px,1fr))}
+    .card{
+      background:white; border-radius:14px; padding:20px;
+      box-shadow: 0 8px 30px rgba(12,18,32,0.04);
+      transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+      display:flex; align-items:center; justify-content:center; min-height:110px; font-weight:700;
+    }
+    .card:hover{transform:translateY(-8px); box-shadow: 0 18px 50px rgba(12,18,32,0.08)}
+
+    /* Portfolio */
+    .portfolio-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .portfolio-item{
+      border-radius:12px; overflow:hidden; background:#fff; position:relative;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.06);
+    }
+    .portfolio-item img{width:100%; display:block; height:160px; object-fit:cover}
+    .portfolio-item .meta{padding:14px}
+
+    /* Featured video */
+    .video-wrap{max-width:780px; margin:0 auto; border-radius:12px; overflow:hidden; box-shadow:0 20px 50px rgba(8,12,30,0.08)}
+    .video-wrap iframe{width:100%; height:460px; border:0; display:block}
+
+    /* Contact */
+    .contact-card{background:linear-gradient(180deg,#fff,#fbfbff); padding:18px; border-radius:12px; box-shadow: 0 8px 30px rgba(2,6,23,0.04)}
+    .contact-links a{display:inline-block; margin-right:14px; color:var(--accent); font-weight:700; text-decoration:none}
+
+    /* Owner card */
+    .owner-card{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      margin-top:28px;
+      background: #fff;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.05);
+      max-width:600px;
+    }
+    .owner-card img{
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      object-fit:cover;
+      border:2px solid var(--accent);
+      transition: transform 0.3s;
+    }
+    .owner-card img:hover{transform:scale(1.08);}
+    .owner-card h4{margin:0; color:var(--accent);}
+    .owner-card p{margin:4px 0 0; color:var(--muted);}
+
+    /* footer */
+    footer{padding:26px 20px; text-align:center; color:var(--muted); font-size:14px; margin-top:30px}
+
+    /* Animations */
+    .reveal{opacity:0; transform: translateY(18px); transition: all .7s cubic-bezier(.2,.9,.3,1)}
+    .reveal.in-view{opacity:1; transform: translateY(0)}
+    @keyframes fadeUp{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+
+    @media (max-width:760px){
+      .hero h2{font-size:26px}
+      .video-wrap iframe{height:260px}
+      .hero{min-height:50vh}
+      header{padding:10px 16px}
+      .brand h1{font-size:16px}
+      nav{display:none}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <img src="https://i.ibb.co/XZ4F0Kpf/download.jpg" alt="Film Flicker Logo" onerror="this.style.display='none'">
+      <div>
+        <h1>Film Flicker</h1>
+        <div style="font-size:12px;color:var(--muted)">Production House</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#contact">Contact</a>
+      <a class="cta" href="https://www.youtube.com/@FilmFlickerProduction" target="_blank">Watch</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="hero__bg" id="heroBg"></div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <h2>Film Flicker Production</h2>
+      <p>২৯শে ফেব্রুয়ারি: চার বছরে একবার আসে সেই দিন — ভালোবাসার সব হিসেব পাল্টে দেয়।</p>
+      <div class="buttons">
+        <a class="btn btn--primary" href="#portfolio">আমাদের কাজ দেখুন</a>
+        <a class="btn btn--outline" href="https://www.youtube.com/@FilmFlickerProduction" target="_blank">YouTube চ্যানেল</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Video -->
+  <section class="container reveal" id="featured">
+    <div class="section-title"><h3>Featured Drama</h3></div>
+    <p class="lead">29th February | ২৯ই ফেব্রুয়ারি | Fazlur Rahman Babu | FFP Original Drama</p>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/7_k7XvfZcs8" title="Featured Drama" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <!-- About / Owner -->
+  <section class="container reveal" id="about">
+    <div class="section-title"><h3>About Us</h3></div>
+    <p class="lead">
+      <strong>Film Flicker Production</strong> হলো একটি উদ্ভাবনী এবং ক্রিয়েটিভ প্রোডাকশন হাউস, যা শর্ট ফিল্ম, নাটক, মিউজিক ভিডিও এবং অন্যান্য ভিজ্যুয়াল কন্টেন্ট তৈরিতে সম্পূর্ণ উৎসর্গীকৃত। আমাদের ক্রিয়েটিভ টিম গল্পের মূল শক্তি এবং ভিজ্যুয়াল ন্যারেটিভের মাধ্যমে দর্শকের মনে গভীর ছাপ ফেলার প্রতি অঙ্গীকারবদ্ধ।<br><br>
+      আমরা বিশ্বাস করি প্রতিটি গল্পে থাকে একটি বার্তা—চাই তা আনন্দ, শিক্ষা, সামাজিক সচেতনতা বা আবেগিক অনুভূতি হোক। Film Flicker Production-এ আমরা শুধুমাত্র চলচ্চিত্র বানাই না, আমরা গল্পকে জীবন্ত করি।<br><br>
+      আমাদের লক্ষ্য হলো মানসম্মত কনটেন্ট তৈরি যা দর্শকের সঙ্গে সংযোগ স্থাপন করে এবং সমাজের জন্য ইতিবাচক প্রভাব সৃষ্টি করে।<br><br>
+      সংক্ষেপে, Film Flicker Production শুধু একটি প্রোডাকশন হাউস নয়, এটি একটি প্ল্যাটফর্ম যেখানে গল্পের সৃজনশীলতা এবং ভিজ্যুয়াল এক্সিলেন্স মিলিত হয়।
+    </p>
+
+    <!-- Owner Card -->
+    <div class="owner-card">
+      <img src="https://i.ibb.co.com/NnNZdCXF/MOHIM.jpg" alt="Mohin Chowdhury">
+      <div>
+        <h4>Mohin Chowdhury</h4>
+        <p>Founder & Owner, Film Flicker Production</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="container reveal" id="services">
+    <div class="section-title"><h3>Our Services</h3></div>
+    <p class="lead">আমরা প্রদান করি — কাহিনীচয়ন, শুটিং, সম্পাদনা ও ইভেন্ট কভারেজ।</p>
+    <div class="grid services-grid">
+      <div class="card">🎬 নাটক প্রোডাকশন</div>
+      <div class="card">📽️ শর্ট ফিল্ম</div>
+      <div class="card">🎤 ইভেন্ট কভারেজ</div>
+      <div class="card">🎞️ সম্পাদনা ও কালার গ্রেডিং</div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="container reveal" id="portfolio">
+    <div class="section-title"><h3>Our Works</h3></div>
+    <p class="lead">নিচে কয়েকটি কাজের নমুনা— ক্লিক করে বড় করে দেখুন।</p>
+    <div class="grid portfolio-grid" style="grid-template-columns:repeat(2,1fr); gap:18px">
+      <div class="portfolio-item">
+        <img src="https://i.ibb.co/NgwwcPYT/motshokonna.jpg" alt="Motshokonna">
+        <div class="meta">
+          <strong>Motshokonna</strong>
+          <div style="color:var(--muted); margin-top:6px; font-size:14px">Short film / 2024</div>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://i.ibb.co/Q7MZfzV0/toke-bolte-chai.jpg" alt="Toke Bolte Chai">
+        <div class="meta">
+          <strong>Toke Bolte Chai</strong>
+          <div style="color:var(--muted); margin-top:6px; font-size:14px">Drama / 2023</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="container reveal" id="contact">
+    <div class="section-title"><h3>Contact Us</h3></div>
+    <div class="contact-card">
+      <p><strong>Email:</strong> <a href="mailto:filmflickerpro@gmail.com">filmflickerpro@gmail.com</a></p>
+      <p><strong>Facebook:</strong> <a href="https://www.facebook.com/mdmohin.chowdhury.5" target="_blank">mdmohin.chowdhury.5</a></p>
+      <p class="lead">চাইলে নিচের লিংকে মেসেজ বা চ্যানেলে সাবস্ক্রাইব করুন।</p>
+      <div class="contact-links">
+        <a href="https://www.youtube.com/@FilmFlickerProduction" target="_blank">YouTube</a>
+        <a href="https://www.facebook.com/mdmohin.chowdhury.5" target="_blank">Facebook</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© <span id="year"></span> Film Flicker Production | All Rights Reserved</div>
+  </footer>
+
+  <script>
+    // Dynamic year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // HERO parallax
+    const heroBg = document.getElementById('heroBg');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY * 0.18;
+      heroBg.style.transform = 'translateY(' + (y * -1) + 'px) scale(1.03)';
+    }, { passive: true });
+
+    // Reveal animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const href = a.getAttribute('href');
+        if(href.length>1){ e.preventDefault(); document.querySelector(href).scrollIntoView({behavior:'smooth', block:'start'});}
+      });
+    });
+  </script>
+</body>
+</html>
